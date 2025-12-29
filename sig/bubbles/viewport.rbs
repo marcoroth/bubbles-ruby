@@ -1,0 +1,125 @@
+# Generated from lib/bubbles/viewport.rb with RBS::Inline
+
+module Bubbles
+  # Viewport is a scrollable content pane.
+  #
+  # Example:
+  #   viewport = Bubbles::Viewport.new(width: 80, height: 24)
+  #   viewport.content = "Long text content..."
+  #
+  #   # In update:
+  #   viewport, command = viewport.update(message)
+  #
+  #   # In view:
+  #   viewport.view
+  class Viewport
+    attr_accessor width: Integer
+
+    attr_accessor height: Integer
+
+    attr_accessor style: Lipgloss::Style?
+
+    attr_accessor mouse_wheel_enabled: bool
+
+    attr_accessor mouse_wheel_delta: Integer
+
+    attr_reader y_offset: Integer
+
+    attr_reader x_offset: Integer
+
+    # : (?width: Integer, ?height: Integer) -> void
+    def initialize: (?width: Integer, ?height: Integer) -> void
+
+    # : () -> nil
+    def init: () -> nil
+
+    # : () -> bool
+    def at_top?: () -> bool
+
+    # : () -> bool
+    def at_bottom?: () -> bool
+
+    # : () -> bool
+    def past_bottom?: () -> bool
+
+    # : () -> Float -- scroll percentage (0.0 to 1.0)
+    def scroll_percent: () -> Float
+
+    # : (String) -> void
+    def content=: (String) -> void
+
+    # : () -> String
+    def content: () -> String
+
+    # : (Integer) -> Integer
+    def y_offset=: (Integer) -> Integer
+
+    # : (Integer) -> Integer
+    def x_offset=: (Integer) -> Integer
+
+    # : (Integer) -> Integer
+    def horizontal_step=: (Integer) -> Integer
+
+    # : (Integer) -> Array[String]
+    def scroll_down: (Integer) -> Array[String]
+
+    # : (Integer) -> Array[String]
+    def scroll_up: (Integer) -> Array[String]
+
+    # : (Integer) -> void
+    def scroll_left: (Integer) -> void
+
+    # : (Integer) -> void
+    def scroll_right: (Integer) -> void
+
+    # : () -> Array[String]
+    def page_down: () -> Array[String]
+
+    # : () -> Array[String]
+    def page_up: () -> Array[String]
+
+    # : () -> Array[String]
+    def half_page_down: () -> Array[String]
+
+    # : () -> Array[String]
+    def half_page_up: () -> Array[String]
+
+    # : () -> Array[String]
+    def goto_top: () -> Array[String]
+
+    # : () -> Array[String]
+    def goto_bottom: () -> Array[String]
+
+    # : () -> Integer
+    def total_line_count: () -> Integer
+
+    # : () -> Integer
+    def visible_line_count: () -> Integer
+
+    # : (Bubbletea::Message) -> [Viewport, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Viewport, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : (Bubbletea::KeyMessage) -> void
+    def handle_key: (Bubbletea::KeyMessage) -> void
+
+    # : (Bubbletea::MouseMessage) -> void
+    def handle_mouse: (Bubbletea::MouseMessage) -> void
+
+    # : () -> Integer
+    def max_y_offset: () -> Integer
+
+    # : () -> Array[String]
+    def visible_lines: () -> Array[String]
+
+    # : (String, Integer, Integer) -> String
+    def cut_string: (String, Integer, Integer) -> String
+
+    # : (String) -> String
+    def strip_ansi: (String) -> String
+  end
+end

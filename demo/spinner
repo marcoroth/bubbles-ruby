@@ -1,0 +1,103 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Spinner demo - shows all available spinner styles
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+SPINNERS = [
+  [:LINE, Bubbles::Spinners::LINE],
+  [:DOT, Bubbles::Spinners::DOT],
+  [:MINI_DOT, Bubbles::Spinners::MINI_DOT],
+  [:JUMP, Bubbles::Spinners::JUMP],
+  [:PULSE, Bubbles::Spinners::PULSE],
+  [:POINTS, Bubbles::Spinners::POINTS],
+  [:GLOBE, Bubbles::Spinners::GLOBE],
+  [:MOON, Bubbles::Spinners::MOON],
+  [:MONKEY, Bubbles::Spinners::MONKEY],
+  [:METER, Bubbles::Spinners::METER],
+  [:HAMBURGER, Bubbles::Spinners::HAMBURGER],
+  [:ELLIPSIS, Bubbles::Spinners::ELLIPSIS],
+].freeze
+
+class SpinnerDemo
+  include Bubbletea::Model
+
+  def initialize
+    @index = 0
+    @spinner = Bubbles::Spinner.new(spinner: current_spinner_def)
+    @spinner.style = Lipgloss::Style.new.foreground("205")
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @name_style = Lipgloss::Style.new.foreground("99")
+  end
+
+  def init
+    _, command = @spinner.init
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "left", "h"
+        @index = (@index - 1) % SPINNERS.length
+        return [self, switch_spinner]
+      when "right", "l"
+        @index = (@index + 1) % SPINNERS.length
+        return [self, switch_spinner]
+      end
+
+      [self, nil]
+    when Bubbles::Spinner::TickMessage
+      @spinner, command = @spinner.update(message)
+
+      [self, command]
+    else
+      [self, nil]
+    end
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Spinner Demo")
+    lines << ""
+    lines << "  #{@spinner.view} #{@name_style.render(current_spinner_name)}"
+    lines << ""
+    lines << @help_style.render("  ←/→ change spinner • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+
+  private
+
+  def current_spinner_name
+    SPINNERS[@index][0].to_s
+  end
+
+  def current_spinner_def
+    SPINNERS[@index][1]
+  end
+
+  def switch_spinner
+    @spinner = Bubbles::Spinner.new(spinner: current_spinner_def)
+    @spinner.style = Lipgloss::Style.new.foreground("205")
+
+    _, command = @spinner.init
+
+    command
+  end
+end
+
+Bubbletea.run(SpinnerDemo.new)

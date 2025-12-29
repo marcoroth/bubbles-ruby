@@ -1,0 +1,138 @@
+# Generated from lib/bubbles/list.rb with RBS::Inline
+
+module Bubbles
+  # List is a feature-rich component for browsing a list of items.
+  # It features optional filtering, pagination, and status messages.
+  #
+  # Example:
+  #   items = [
+  #     { title: "Item 1", description: "Description 1" },
+  #     { title: "Item 2", description: "Description 2" }
+  #   ]
+  #   list = Bubbles::List.new(items, width: 40, height: 10)
+  #
+  #   # In update:
+  #   list, command = list.update(message)
+  #
+  #   # In view:
+  #   list.view
+  class List
+    UNFILTERED: Symbol
+
+    FILTERING: Symbol
+
+    FILTER_APPLIED: Symbol
+
+    class StatusMessageTimeoutMessage < Bubbletea::Message
+    end
+
+    attr_accessor width: Integer
+
+    attr_accessor height: Integer
+
+    attr_accessor title: String
+
+    attr_accessor show_title: bool
+
+    attr_accessor show_filter: bool
+
+    attr_accessor show_pagination: bool
+
+    attr_accessor show_status_bar: bool
+
+    attr_accessor status_message_lifetime: Float
+
+    attr_accessor fill_height: bool
+
+    attr_accessor title_style: Lipgloss::Style?
+
+    attr_accessor item_style: Lipgloss::Style?
+
+    attr_accessor selected_item_style: Lipgloss::Style?
+
+    attr_accessor filter_prompt: String
+
+    attr_accessor filter_style: Lipgloss::Style?
+
+    attr_accessor status_bar_style: Lipgloss::Style?
+
+    attr_accessor pagination_style: Lipgloss::Style?
+
+    attr_reader filter_state: Symbol
+
+    attr_reader filter_input: TextInput
+
+    # : (?Array[untyped], ?width: Integer, ?height: Integer) -> void
+    def initialize: (?Array[untyped], ?width: Integer, ?height: Integer) -> void
+
+    # : (Array[untyped]) -> void
+    def items=: (Array[untyped]) -> void
+
+    attr_reader items: Array[untyped]
+
+    # : () -> Array[untyped]
+    def visible_items: () -> Array[untyped]
+
+    # : () -> Integer
+    def selected_index: () -> Integer
+
+    # : () -> untyped
+    def selected_item: () -> untyped
+
+    # : (Integer) -> void
+    def select: (Integer) -> void
+
+    # : () -> void
+    def select_next: () -> void
+
+    # : () -> void
+    def select_prev: () -> void
+
+    # : (String) -> Bubbletea::Command
+    def set_status_message: (String) -> Bubbletea::Command
+
+    # : () -> void
+    def clear_status_message: () -> void
+
+    # : () -> Bubbletea::Command?
+    def start_filtering: () -> Bubbletea::Command?
+
+    # : () -> void
+    def apply_filter: () -> void
+
+    # : () -> void
+    def reset_filter: () -> void
+
+    # : (Bubbletea::Message) -> [List, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ List, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : () -> String
+    def items_view: () -> String
+
+    # : (untyped, Integer, bool) -> String
+    def render_item: (untyped, Integer, bool) -> String
+
+    # : (untyped) -> String
+    def item_title: (untyped) -> String
+
+    # : (untyped) -> String
+    def item_filter_value: (untyped) -> String
+
+    # : () -> void
+    def do_filter: () -> void
+
+    # : () -> Integer
+    def visible_item_count: () -> Integer
+
+    # : () -> void
+    def update_offset: () -> void
+
+    # : () -> void
+    def update_pagination: () -> void
+  end
+end

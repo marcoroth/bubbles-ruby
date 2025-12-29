@@ -1,0 +1,123 @@
+# Generated from lib/bubbles/progress.rb with RBS::Inline
+
+module Bubbles
+  # Progress renders an animated progress bar.
+  #
+  # Example:
+  #   progress = Bubbles::Progress.new
+  #   progress.width = 40
+  #
+  #   # Static rendering
+  #   puts progress.view_as(0.5)  # 50%
+  #
+  #   # Animated rendering (use in bubbletea)
+  #   command = progress.set_percent(0.75)
+  #   # Then in update: progress.update(message)
+  #   puts progress.view
+  class Progress
+    class FrameMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      # : (id: Integer, tag: Integer) -> void
+      def initialize: (id: Integer, tag: Integer) -> void
+    end
+
+    FPS: Integer
+
+    DEFAULT_WIDTH: Integer
+
+    SPRING_FREQUENCY: Float
+
+    SPRING_DAMPING: Float
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_accessor width: Integer
+
+    attr_accessor full: String
+
+    attr_accessor full_color: String
+
+    attr_accessor empty: String
+
+    attr_accessor empty_color: String
+
+    attr_accessor show_percentage: bool
+
+    attr_accessor percent_format: String
+
+    attr_accessor percent_style: Lipgloss::Style?
+
+    attr_accessor use_gradient: bool
+
+    attr_accessor gradient_a: String?
+
+    attr_accessor gradient_b: String?
+
+    attr_accessor scale_gradient: bool
+
+    attr_reader id: Integer
+
+    # : (?width: Integer, ?gradient: Array[String]?, ?scaled_gradient: Array[String]?, ?solid_fill: String?) -> void
+    def initialize: (?width: Integer, ?gradient: Array[String]?, ?scaled_gradient: Array[String]?, ?solid_fill: String?) -> void
+
+    # : () -> nil
+    def init: () -> nil
+
+    # : (Bubbletea::Message) -> [Progress, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Progress, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    # : (Float) -> String
+    def view_as: (Float) -> String
+
+    # : () -> Float
+    def percent: () -> Float
+
+    # : (Float) -> Bubbletea::Command
+    def set_percent: (Float) -> Bubbletea::Command
+
+    # : (?Float) -> Bubbletea::Command
+    def increment_percent: (?Float) -> Bubbletea::Command
+
+    # : (?Float) -> Bubbletea::Command
+    def decrement_percent: (?Float) -> Bubbletea::Command
+
+    # : () -> bool
+    def animating?: () -> bool
+
+    # : (String, String, ?scaled: bool) -> void
+    def gradient: (String, String, ?scaled: bool) -> void
+
+    private
+
+    # : () -> Bubbletea::Command
+    def next_frame: () -> Bubbletea::Command
+
+    # : (Float, Integer) -> String
+    def render_bar: (Float, Integer) -> String
+
+    # : (Integer) -> String
+    def render_solid_fill: (Integer) -> String
+
+    # : (Integer) -> String
+    def render_empty_fill: (Integer) -> String
+
+    # : (Integer, Integer) -> String
+    def render_gradient_fill: (Integer, Integer) -> String
+
+    # : (Float) -> String
+    def render_percentage: (Float) -> String
+
+    # : (String, String) -> String
+    def colorize: (String, String) -> String
+
+    # : (String?, String?, Float) -> String
+    def blend_colors: (String?, String?, Float) -> String
+  end
+end

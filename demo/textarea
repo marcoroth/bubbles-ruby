@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# TextArea demo - multi-line text input
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class TextAreaDemo
+  include Bubbletea::Model
+
+  def initialize
+    @textarea = Bubbles::TextArea.new(width: 60, height: 10)
+    @textarea.placeholder = "Type your message here..."
+    @textarea.show_line_numbers = true
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @info_style = Lipgloss::Style.new.foreground("99")
+    @border_style = Lipgloss::Style.new.border(Lipgloss::ROUNDED_BORDER).border_foreground("62").width(64)
+  end
+
+  def init
+    command = @textarea.focus
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.key_type
+      when Bubbletea::KeyMessage::KEY_CTRL_C
+        return [self, Bubbletea.quit]
+      when Bubbletea::KeyMessage::KEY_CTRL_L
+        @textarea.show_line_numbers = !@textarea.show_line_numbers
+
+        return [self, nil]
+      end
+    end
+
+    @textarea, command = @textarea.update(message)
+
+    [self, command]
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  TextArea Demo")
+    lines << ""
+    lines << @border_style.render(@textarea.view)
+    lines << ""
+    lines << @info_style.render("  Line #{@textarea.row + 1}, Col #{@textarea.col + 1} | #{@textarea.line_count} lines | #{@textarea.value.length} chars")
+    lines << ""
+    lines << @help_style.render("  ctrl+l toggle line numbers | ctrl+c quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(TextAreaDemo.new)

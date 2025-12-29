@@ -1,0 +1,88 @@
+# Generated from lib/bubbles/help.rb with RBS::Inline
+
+module Bubbles
+  # Help renders help text from key bindings.
+  #
+  # Example:
+  #   help = Bubbles::Help.new
+  #   help.width = 80
+  #
+  #   # Define a keymap with short_help and full_help methods
+  #   class MyKeyMap
+  #     BINDINGS = {
+  #       up: Bubbles::Key.binding(keys: ["up", "k"], help: ["↑/k", "up"]),
+  #       down: Bubbles::Key.binding(keys: ["down", "j"], help: ["↓/j", "down"]),
+  #       help: Bubbles::Key.binding(keys: ["?"], help: ["?", "help"]),
+  #       quit: Bubbles::Key.binding(keys: ["q"], help: ["q", "quit"])
+  #     }
+  #
+  #     def short_help
+  #       [BINDINGS[:help], BINDINGS[:quit]]
+  #     end
+  #
+  #     def full_help
+  #       [
+  #         [BINDINGS[:up], BINDINGS[:down]],
+  #         [BINDINGS[:help], BINDINGS[:quit]]
+  #       ]
+  #     end
+  #   end
+  #
+  #   keymap = MyKeyMap.new
+  #   puts help.view(keymap)
+  class Help
+    DEFAULT_KEY_STYLE: Lipgloss::Style?
+
+    DEFAULT_DESC_STYLE: Lipgloss::Style?
+
+    DEFAULT_SEPARATOR_STYLE: Lipgloss::Style?
+
+    attr_accessor width: Integer
+
+    attr_accessor show_all: bool
+
+    attr_accessor short_separator: String
+
+    attr_accessor full_separator: String
+
+    attr_accessor full_help_column_gap: Integer
+
+    attr_accessor key_style: Lipgloss::Style?
+
+    attr_accessor desc_style: Lipgloss::Style?
+
+    attr_accessor separator_style: Lipgloss::Style?
+
+    # : () -> void
+    def initialize: () -> void
+
+    # : (untyped) -> String
+    def view: (untyped) -> String
+
+    # : (Array[Key::Binding]?) -> String
+    def short_help_view: (Array[Key::Binding]?) -> String
+
+    # : (Array[Array[Key::Binding]]?) -> String
+    def full_help_view: (Array[Array[Key::Binding]]?) -> String
+
+    private
+
+    # : (Key::Binding) -> String
+    def render_binding: (Key::Binding) -> String
+
+    # : (String) -> String
+    def render_key: (String) -> String
+
+    # : (String) -> String
+    def render_desc: (String) -> String
+
+    # : (String) -> String
+    def render_separator: (String) -> String
+
+    # : (String) -> String
+    def truncate_to_width: (String) -> String
+
+    # : (String) -> String
+    def strip_ansi: (String) -> String
+  end
+end

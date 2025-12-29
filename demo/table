@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Table demo - data table with scrolling
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+COLUMNS = [
+  { title: "Rank", width: 6 },
+  { title: "City", width: 15 },
+  { title: "Country", width: 12 },
+  { title: "Population", width: 12 },
+].freeze
+
+ROWS = [
+  ["1", "Tokyo", "Japan", "37,400,068"],
+  ["2", "Delhi", "India", "28,514,000"],
+  ["3", "Shanghai", "China", "25,582,000"],
+  ["4", "São Paulo", "Brazil", "21,650,000"],
+  ["5", "Mexico City", "Mexico", "21,581,000"],
+  ["6", "Cairo", "Egypt", "20,076,000"],
+  ["7", "Mumbai", "India", "19,980,000"],
+  ["8", "Beijing", "China", "19,618,000"],
+  ["9", "Dhaka", "Bangladesh", "19,578,000"],
+  ["10", "Osaka", "Japan", "19,281,000"],
+  ["11", "New York", "USA", "18,819,000"],
+  ["12", "Karachi", "Pakistan", "15,400,000"],
+  ["13", "Buenos Aires", "Argentina", "14,967,000"],
+  ["14", "Chongqing", "China", "14,838,000"],
+  ["15", "Istanbul", "Turkey", "14,751,000"],
+].freeze
+
+class TableDemo
+  include Bubbletea::Model
+
+  def initialize
+    @table = Bubbles::Table.new(columns: COLUMNS, rows: ROWS, height: 8)
+
+    @table.header_style = Lipgloss::Style.new.bold(true).foreground("212").padding_left(1)
+    @table.cell_style = Lipgloss::Style.new.padding_left(1)
+    @table.selected_style = Lipgloss::Style.new.bold(true).foreground("229").background("57").padding_left(1)
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @info_style = Lipgloss::Style.new.foreground("99")
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "ctrl+c", "esc"
+        return [self, Bubbletea.quit]
+      end
+    end
+
+    @table, command = @table.update(message)
+
+    [self, command]
+  end
+
+  def view
+    selected = @table.selected_row_data
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  World's Largest Cities")
+    lines << ""
+    lines << @table.view
+    lines << ""
+
+    lines << @info_style.render("  Selected: #{selected[1]}, #{selected[2]} (#{selected[3]})") if selected
+
+    lines << ""
+    lines << @help_style.render("  ↑/↓ navigate • pgup/pgdn scroll • g/G top/bottom • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(TableDemo.new)

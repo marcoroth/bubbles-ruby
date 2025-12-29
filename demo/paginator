@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Paginator demo - shows pagination controls
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+ITEMS = (1..47).map { |i| "Item #{i}" }.freeze
+
+class PaginatorDemo
+  include Bubbletea::Model
+
+  def initialize
+    @paginator = Bubbles::Paginator.new(type: Bubbles::Paginator::DOTS, per_page: 5)
+    @paginator.update_total_pages(ITEMS.length)
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @item_style = Lipgloss::Style.new.foreground("252")
+    @page_style = Lipgloss::Style.new.foreground("99")
+    @help_style = Lipgloss::Style.new.foreground("241")
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "left", "h", "k", "up"
+        @paginator.prev_page
+      when "right", "l", "j", "down"
+        @paginator.next_page
+      when "home", "g"
+        @paginator.go_to_page(0)
+      when "end", "G"
+        @paginator.go_to_page(@paginator.total_pages - 1)
+      when "t"
+        @paginator.type = if @paginator.type == Bubbles::Paginator::DOTS
+                            Bubbles::Paginator::ARABIC
+                          else
+                            Bubbles::Paginator::DOTS
+                          end
+      end
+    end
+
+    [self, nil]
+  end
+
+  def view
+    start_index, end_index = @paginator.slice_bounds(ITEMS.length)
+    current_items = ITEMS[start_index...end_index]
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Paginator Demo")
+    lines << ""
+
+    current_items.each do |item|
+      lines << "  #{@item_style.render(item)}"
+    end
+
+    (5 - current_items.length).times { lines << "" }
+
+    lines << ""
+    lines << "  #{@page_style.render(@paginator.view)}"
+    lines << ""
+    lines << @help_style.render("  ←/→ navigate • t toggle style • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(PaginatorDemo.new)

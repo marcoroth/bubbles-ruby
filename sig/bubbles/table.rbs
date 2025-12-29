@@ -1,0 +1,119 @@
+# Generated from lib/bubbles/table.rb with RBS::Inline
+
+module Bubbles
+  # Table is a simple table component for displaying tabular data.
+  #
+  # Example:
+  #   columns = [
+  #     { title: "Name", width: 20 },
+  #     { title: "Age", width: 5 }
+  #   ]
+  #   rows = [
+  #     ["Alice", "30"],
+  #     ["Bob", "25"]
+  #   ]
+  #   table = Bubbles::Table.new(columns: columns, rows: rows)
+  #
+  #   # In update:
+  #   table, command = table.update(message)
+  #
+  #   # In view:
+  #   table.view
+  class Table
+    class Column < Struct[untyped]
+      attr_accessor title(): untyped
+
+      attr_accessor width(): untyped
+
+      def self.new: (?title: untyped, ?width: untyped) -> instance
+                  | ({ ?title: untyped, ?width: untyped }) -> instance
+    end
+
+    attr_accessor height: Integer
+
+    attr_accessor focus: bool
+
+    attr_reader cursor: Integer
+
+    attr_reader columns: Array[Column]
+
+    attr_reader rows: Array[Array[String]]
+
+    attr_accessor header_style: Lipgloss::Style?
+
+    attr_accessor cell_style: Lipgloss::Style?
+
+    attr_accessor selected_style: Lipgloss::Style?
+
+    # @rbs columns: Array[Hash[Symbol, untyped] | Column] -- Column definitions with :title and :width
+    # @rbs rows: Array[Array[String]] -- Row data
+    # @rbs height: Integer -- Visible rows (excluding header)
+    # @rbs return: void
+    def initialize: (?columns: Array[Hash[Symbol, untyped] | Column], ?rows: Array[Array[String]], ?height: Integer) -> void
+
+    # : (Array[Hash[Symbol, untyped] | Column]) -> void
+    def columns=: (Array[Hash[Symbol, untyped] | Column]) -> void
+
+    # : (Array[Array[String]]) -> void
+    def rows=: (Array[Array[String]]) -> void
+
+    # : () -> Integer
+    def selected_row: () -> Integer
+
+    # : () -> Array[String]?
+    def selected_row_data: () -> Array[String]?
+
+    # : (Integer) -> void
+    def go_to_row: (Integer) -> void
+
+    # : (?Integer) -> void
+    def move_up: (?Integer) -> void
+
+    # : (?Integer) -> void
+    def move_down: (?Integer) -> void
+
+    # : () -> void
+    def go_to_top: () -> void
+
+    # : () -> void
+    def go_to_bottom: () -> void
+
+    # : () -> void
+    def page_up: () -> void
+
+    # : () -> void
+    def page_down: () -> void
+
+    # : () -> void
+    def focus!: () -> void
+
+    # : () -> void
+    def blur: () -> void
+
+    # : () -> bool
+    def focused?: () -> bool
+
+    # : (Bubbletea::Message) -> [Table, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Table, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : () -> String
+    def render_header: () -> String
+
+    # : () -> String
+    def render_separator: () -> String
+
+    # : (Integer) -> String
+    def render_row: (Integer) -> String
+
+    # : (String, Integer) -> String
+    def truncate_or_pad: (String, Integer) -> String
+
+    # : () -> void
+    def update_offset: () -> void
+  end
+end

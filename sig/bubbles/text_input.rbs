@@ -1,0 +1,183 @@
+# Generated from lib/bubbles/text_input.rb with RBS::Inline
+
+module Bubbles
+  # TextInput is a single-line text input component.
+  #
+  # Example:
+  #   input = Bubbles::TextInput.new
+  #   input.placeholder = "Enter your name..."
+  #   input.focus
+  #
+  #   # In update:
+  #   input, command = input.update(message)
+  #
+  #   # In view:
+  #   input.view
+  class TextInput
+    ECHO_NORMAL: Symbol
+
+    ECHO_PASSWORD: Symbol
+
+    ECHO_NONE: Symbol
+
+    class PasteMessage < Bubbletea::Message
+      attr_reader text: String
+
+      # : (String) -> void
+      def initialize: (String) -> void
+    end
+
+    class PasteErrorMessage < Bubbletea::Message
+      attr_reader error: StandardError
+
+      # : (StandardError) -> void
+      def initialize: (StandardError) -> void
+    end
+
+    attr_accessor prompt: String
+
+    attr_accessor placeholder: String
+
+    attr_accessor echo_mode: Symbol
+
+    attr_accessor echo_character: String
+
+    attr_accessor char_limit: Integer
+
+    attr_accessor width: Integer
+
+    attr_accessor prompt_style: Lipgloss::Style?
+
+    attr_accessor text_style: Lipgloss::Style?
+
+    attr_accessor placeholder_style: Lipgloss::Style?
+
+    attr_accessor cursor_style: Lipgloss::Style?
+
+    attr_accessor validate: (^(String) -> StandardError?)?
+
+    attr_accessor show_suggestions: bool
+
+    attr_reader position: Integer
+
+    attr_reader cursor: Cursor
+
+    attr_reader error: StandardError?
+
+    # : () -> void
+    def initialize: () -> void
+
+    # : () -> String
+    def value: () -> String
+
+    # : (String) -> void
+    def value=: (String) -> void
+
+    # : (Integer) -> void
+    def position=: (Integer) -> void
+
+    # : () -> void
+    def cursor_start: () -> void
+
+    # : () -> void
+    def cursor_end: () -> void
+
+    # : () -> bool
+    def focused?: () -> bool
+
+    # : () -> Bubbletea::Command?
+    def focus: () -> Bubbletea::Command?
+
+    # : () -> void
+    def blur: () -> void
+
+    # : () -> void
+    def reset: () -> void
+
+    # : (Array[String]) -> void
+    def suggestions=: (Array[String]) -> void
+
+    # : (Bubbletea::Message) -> [TextInput, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ TextInput, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : (Bubbletea::KeyMessage) -> void
+    def handle_key: (Bubbletea::KeyMessage) -> void
+
+    # : () -> void
+    def delete_character_backward: () -> void
+
+    # : () -> void
+    def delete_character_forward: () -> void
+
+    # : () -> void
+    def delete_before_cursor: () -> void
+
+    # : () -> void
+    def delete_after_cursor: () -> void
+
+    # : () -> void
+    def delete_word_backward: () -> void
+
+    # : () -> void
+    def delete_word_forward: () -> void
+
+    # : () -> void
+    def word_backward: () -> void
+
+    # : () -> void
+    def word_forward: () -> void
+
+    # : (Array[String]) -> void
+    def insert_runes: (Array[String]) -> void
+
+    # : (Array[String]) -> Array[String]
+    def sanitize: (Array[String]) -> Array[String]
+
+    # : () -> void
+    def handle_overflow: () -> void
+
+    # : (String) -> String
+    def echo_transform: (String) -> String
+
+    # : (Array[String]) -> void
+    def apply_value: (Array[String]) -> void
+
+    # : (Array[String]) -> StandardError?
+    def run_validate: (Array[String]) -> StandardError?
+
+    # : () -> String
+    def render_prompt: () -> String
+
+    # : (String) -> String
+    def render_text: (String) -> String
+
+    # : (String) -> String
+    def render_placeholder: (String) -> String
+
+    # : () -> String
+    def placeholder_view: () -> String
+
+    # : () -> String?
+    def current_suggestion_remainder: () -> String?
+
+    # : () -> void
+    def update_suggestions: () -> void
+
+    # : () -> bool
+    def can_accept_suggestion?: () -> bool
+
+    # : () -> void
+    def accept_suggestion: () -> void
+
+    # : () -> void
+    def next_suggestion: () -> void
+
+    # : () -> void
+    def previous_suggestion: () -> void
+  end
+end

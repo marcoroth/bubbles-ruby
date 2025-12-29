@@ -1,0 +1,5 @@
+# Generated from lib/bubbles/version.rb with RBS::Inline
+
+module Bubbles
+  VERSION: String
+end

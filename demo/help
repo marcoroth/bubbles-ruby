@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Help demo - shows key bindings help text
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class KeyMap
+  BINDINGS = {
+    up: Bubbles::Key.binding(keys: ["up", "k"], help: ["↑/k", "move up"]),
+    down: Bubbles::Key.binding(keys: ["down", "j"], help: ["↓/j", "move down"]),
+    left: Bubbles::Key.binding(keys: ["left", "h"], help: ["←/h", "move left"]),
+    right: Bubbles::Key.binding(keys: ["right", "l"], help: ["→/l", "move right"]),
+    help: Bubbles::Key.binding(keys: ["?"], help: ["?", "toggle help"]),
+    quit: Bubbles::Key.binding(keys: ["q", "esc"], help: ["q", "quit"]),
+  }.freeze
+
+  def short_help
+    [BINDINGS[:help], BINDINGS[:quit]]
+  end
+
+  def full_help
+    [
+      [BINDINGS[:up], BINDINGS[:down]],
+      [BINDINGS[:left], BINDINGS[:right]],
+      [BINDINGS[:help], BINDINGS[:quit]],
+    ]
+  end
+end
+
+class HelpDemo
+  include Bubbletea::Model
+
+  def initialize
+    @keymap = KeyMap.new
+    @help = Bubbles::Help.new
+    @help.width = 80
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @box_style = Lipgloss::Style.new.border(Lipgloss::ROUNDED_BORDER).border_foreground("99").padding_left(1).padding_right(1)
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "?"
+        @help.show_all = !@help.show_all
+      end
+    end
+
+    [self, nil]
+  end
+
+  def view
+    help_text = @help.view(@keymap)
+    mode = @help.show_all ? "Full Help" : "Short Help"
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Help Demo - #{mode}")
+    lines << ""
+    lines << "  Press ? to toggle between short and full help"
+    lines << ""
+    lines << @box_style.render(help_text)
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(HelpDemo.new)

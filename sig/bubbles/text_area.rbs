@@ -1,0 +1,161 @@
+# Generated from lib/bubbles/text_area.rb with RBS::Inline
+
+module Bubbles
+  # TextArea is a multi-line text input component.
+  #
+  # Example:
+  #   textarea = Bubbles::TextArea.new
+  #   textarea.placeholder = "Enter text..."
+  #   textarea.focus
+  #
+  #   # In update:
+  #   textarea, command = textarea.update(message)
+  #
+  #   # In view:
+  #   textarea.view
+  class TextArea
+    DEFAULT_WIDTH: Integer
+
+    DEFAULT_HEIGHT: Integer
+
+    DEFAULT_CHAR_LIMIT: Integer
+
+    class PasteMessage < Bubbletea::Message
+      attr_reader text: String
+
+      # : (String) -> void
+      def initialize: (String) -> void
+    end
+
+    attr_accessor width: Integer
+
+    attr_accessor height: Integer
+
+    attr_accessor char_limit: Integer
+
+    attr_accessor placeholder: String
+
+    attr_accessor prompt: String
+
+    attr_accessor show_line_numbers: bool
+
+    attr_accessor end_of_buffer_character: String
+
+    attr_accessor placeholder_style: Lipgloss::Style?
+
+    attr_accessor prompt_style: Lipgloss::Style?
+
+    attr_accessor text_style: Lipgloss::Style?
+
+    attr_accessor line_number_style: Lipgloss::Style?
+
+    attr_reader cursor: Cursor
+
+    attr_reader error: StandardError?
+
+    attr_reader row: Integer
+
+    attr_reader col: Integer
+
+    # : (?width: Integer, ?height: Integer) -> void
+    def initialize: (?width: Integer, ?height: Integer) -> void
+
+    # : () -> String
+    def value: () -> String
+
+    # : (String) -> void
+    def value=: (String) -> void
+
+    # : () -> Integer
+    def line_count: () -> Integer
+
+    # : () -> String
+    def current_line: () -> String
+
+    # : () -> bool
+    def focused?: () -> bool
+
+    # : () -> Bubbletea::Command?
+    def focus: () -> Bubbletea::Command?
+
+    # : () -> void
+    def blur: () -> void
+
+    # : () -> void
+    def reset: () -> void
+
+    # : (Bubbletea::Message) -> [TextArea, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ TextArea, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : (Bubbletea::KeyMessage) -> void
+    def handle_key: (Bubbletea::KeyMessage) -> void
+
+    # : (String) -> void
+    def insert_text: (String) -> void
+
+    # : () -> void
+    def insert_newline: () -> void
+
+    # : () -> void
+    def delete_backward: () -> void
+
+    # : () -> void
+    def delete_forward: () -> void
+
+    # : () -> void
+    def delete_to_end: () -> void
+
+    # : () -> void
+    def delete_to_start: () -> void
+
+    # : () -> void
+    def delete_word_backward: () -> void
+
+    # : () -> void
+    def move_left: () -> void
+
+    # : () -> void
+    def move_right: () -> void
+
+    # : () -> void
+    def move_up: () -> void
+
+    # : () -> void
+    def move_down: () -> void
+
+    # : () -> void
+    def line_start: () -> void
+
+    # : () -> void
+    def line_end: () -> void
+
+    # : () -> void
+    def word_backward: () -> void
+
+    # : () -> void
+    def word_forward: () -> void
+
+    # : () -> void
+    def update_viewport: () -> void
+
+    # : () -> Integer
+    def total_length: () -> Integer
+
+    # : (Integer) -> String
+    def render_line: (Integer) -> String
+
+    # : (String) -> String
+    def render_text: (String) -> String
+
+    # : () -> String
+    def render_end_of_buffer: () -> String
+
+    # : () -> String
+    def placeholder_view: () -> String
+  end
+end

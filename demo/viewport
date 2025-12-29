@@ -1,0 +1,121 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Viewport demo - scrollable content pane
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+CONTENT = <<~TEXT
+  Welcome to the Viewport Demo!
+
+  This is a scrollable content pane. You can use the arrow keys,
+  j/k, Page Up/Down, and other keys to navigate through this content.
+
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+  eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+  ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+  aliquip ex ea commodo consequat.
+
+  Duis aute irure dolor in reprehenderit in voluptate velit esse
+  cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+  cupidatat non proident, sunt in culpa qui officia deserunt mollit
+  anim id est laborum.
+
+  Features of the Viewport:
+  - Vertical scrolling with arrow keys
+  - Page up/down with PgUp/PgDown or Ctrl+B/Ctrl+F
+  - Half page scrolling with Ctrl+U/Ctrl+D
+  - Jump to top/bottom with Home/End or g/G
+
+  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+  accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+  quae ab illo inventore veritatis et quasi architecto beatae vitae
+  dicta sunt explicabo.
+
+  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
+  aut fugit, sed quia consequuntur magni dolores eos qui ratione
+  voluptatem sequi nesciunt.
+
+  Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
+  consectetur, adipisci velit, sed quia non numquam eius modi tempora
+  incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+
+  Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis
+  suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+
+  Quis autem vel eum iure reprehenderit qui in ea voluptate velit
+  esse quam nihil molestiae consequatur, vel illum qui dolorem eum
+  fugiat quo voluptas nulla pariatur?
+
+  At vero eos et accusamus et iusto odio dignissimos ducimus qui
+  blanditiis praesentium voluptatum deleniti atque corrupti quos
+  dolores et quas molestias excepturi sint occaecati cupiditate non
+  provident, similique sunt in culpa qui officia deserunt mollitia
+  animi, id est laborum et dolorum fuga.
+
+  -- End of content --
+TEXT
+
+class ViewportDemo
+  include Bubbletea::Model
+
+  def initialize
+    @viewport = Bubbles::Viewport.new(width: 70, height: 15)
+    @viewport.content = CONTENT
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @info_style = Lipgloss::Style.new.foreground("241")
+    @percent_style = Lipgloss::Style.new.foreground("99")
+    @border_style = Lipgloss::Style.new.border(Lipgloss::ROUNDED_BORDER).border_foreground("62").width(72)
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "ctrl+c", "esc"
+        return [self, Bubbletea.quit]
+      end
+    end
+
+    @viewport, command = @viewport.update(message)
+
+    [self, command]
+  end
+
+  def view
+    percent = (@viewport.scroll_percent * 100).round
+    scroll_info = @percent_style.render("#{percent}%")
+
+    position = if @viewport.at_top?
+                 "Top"
+               elsif @viewport.at_bottom?
+                 "Bottom"
+               else
+                 "#{@viewport.y_offset + 1}/#{@viewport.total_line_count}"
+               end
+
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Viewport Demo")
+    lines << ""
+    lines << @border_style.render(@viewport.view)
+    lines << ""
+    lines << @info_style.render("  #{position}  #{scroll_info}")
+    lines << ""
+    lines << @info_style.render("  ↑/↓/j/k scroll • PgUp/PgDn page • g/G top/bottom • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(ViewportDemo.new)

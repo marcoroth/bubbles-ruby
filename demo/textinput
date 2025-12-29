@@ -1,0 +1,112 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# TextInput demo - single-line text input
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class TextInputDemo
+  include Bubbletea::Model
+
+  def initialize
+    @inputs = [
+      create_input("Name", "What's your name?"),
+      create_input("Email", "you@example.com"),
+      create_input("Password", "Enter password...", password: true),
+    ]
+
+    @focused = 0
+    @submitted = false
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @label_style = Lipgloss::Style.new.foreground("99").width(10)
+    @success_style = Lipgloss::Style.new.foreground("42")
+  end
+
+  def init
+    command = @inputs[@focused].focus
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "ctrl+c", "esc"
+        return [self, Bubbletea.quit]
+      when "tab", "down", "enter"
+        if @focused < @inputs.length - 1
+          @inputs[@focused].blur
+          @focused += 1
+          command = @inputs[@focused].focus
+
+          return [self, command]
+        elsif message.to_s == "enter"
+          @submitted = true
+
+          return [self, nil]
+        end
+      when "shift+tab", "up"
+        if @focused.positive?
+          @inputs[@focused].blur
+          @focused -= 1
+          command = @inputs[@focused].focus
+
+          return [self, command]
+        end
+      end
+    end
+
+    @inputs[@focused], command = @inputs[@focused].update(message)
+
+    [self, command]
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  TextInput Demo")
+    lines << ""
+
+    if @submitted
+      lines << @success_style.render("  Submitted!")
+      lines << ""
+
+      @inputs.each_with_index do |input, i|
+        label = ["Name", "Email", "Password"][i]
+        value = i == 2 ? "********" : input.value
+        lines << "  #{@label_style.render("#{label}:")} #{value}"
+      end
+    else
+      @inputs.each_with_index do |input, i|
+        label = ["Name", "Email", "Password"][i]
+        prefix = i == @focused ? "→ " : "  "
+        lines << "#{prefix}#{@label_style.render("#{label}:")} #{input.view}"
+      end
+    end
+
+    lines << ""
+    lines << @help_style.render("  tab/↓ next • shift+tab/↑ prev • enter submit • esc quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+
+  private
+
+  def create_input(_name, placeholder, password: false)
+    input = Bubbles::TextInput.new
+    input.prompt = ""
+    input.placeholder = placeholder
+    input.echo_mode = password ? :password : :normal
+
+    input
+  end
+end
+
+Bubbletea.run(TextInputDemo.new)

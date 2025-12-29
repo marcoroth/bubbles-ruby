@@ -1,0 +1,138 @@
+# Generated from lib/bubbles/file_picker.rb with RBS::Inline
+
+module Bubbles
+  # FilePicker is a component for browsing and selecting files.
+  #
+  # Example:
+  #   picker = Bubbles::FilePicker.new
+  #   picker.current_directory = "."
+  #
+  #   # In update:
+  #   picker, command = picker.update(message)
+  #
+  #   # Check if a file was selected:
+  #   if picker.did_select_file?
+  #     selected_file = picker.path
+  #   end
+  #
+  #   # In view:
+  #   picker.view
+  class FilePicker
+    class ReadDirMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader entries: Array[Hash[Symbol, untyped]]
+
+      # : (id: Integer, entries: Array[Hash[Symbol, untyped]]) -> void
+      def initialize: (id: Integer, entries: Array[Hash[Symbol, untyped]]) -> void
+    end
+
+    class ErrorMessage < Bubbletea::Message
+      attr_reader error: StandardError
+
+      # : (StandardError) -> void
+      def initialize: (StandardError) -> void
+    end
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_accessor height: Integer
+
+    attr_accessor cursor_char: String
+
+    attr_accessor show_permissions: bool
+
+    attr_accessor show_size: bool
+
+    attr_accessor show_hidden: bool
+
+    attr_accessor dir_allowed: bool
+
+    attr_accessor file_allowed: bool
+
+    attr_accessor allowed_types: Array[String]
+
+    attr_accessor cursor_style: Lipgloss::Style?
+
+    attr_accessor dir_style: Lipgloss::Style?
+
+    attr_accessor file_style: Lipgloss::Style?
+
+    attr_accessor selected_style: Lipgloss::Style?
+
+    attr_accessor permission_style: Lipgloss::Style?
+
+    attr_accessor size_style: Lipgloss::Style?
+
+    attr_accessor disabled_style: Lipgloss::Style?
+
+    attr_reader id: Integer
+
+    attr_reader current_directory: String
+
+    attr_reader path: String?
+
+    attr_reader files: Array[Hash[Symbol, untyped]]
+
+    # @rbs directory: String -- Starting directory
+    # @rbs return: void
+    def initialize: (?directory: String) -> void
+
+    # : (String) -> void
+    def current_directory=: (String) -> void
+
+    # : () -> bool
+    def did_select_file?: () -> bool
+
+    # : () -> bool
+    def selected?: () -> bool
+
+    # : () -> void
+    def clear_selected: () -> void
+
+    # : () -> Integer
+    def cursor: () -> Integer
+
+    # : (Bubbletea::Message) -> [FilePicker, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ FilePicker, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : (Bubbletea::KeyMessage) -> void
+    def handle_key: (Bubbletea::KeyMessage) -> void
+
+    # : () -> void
+    def read_directory: () -> void
+
+    # : (Hash[Symbol, untyped]) -> void
+    def enter_directory: (Hash[Symbol, untyped]) -> void
+
+    # : () -> void
+    def go_up: () -> void
+
+    # : (Hash[Symbol, untyped]) -> void
+    def select_file: (Hash[Symbol, untyped]) -> void
+
+    # : (Hash[Symbol, untyped]) -> bool
+    def can_select?: (Hash[Symbol, untyped]) -> bool
+
+    # : (String) -> String
+    def render_path: (String) -> String
+
+    # : (Hash[Symbol, untyped], bool) -> String
+    def render_entry: (Hash[Symbol, untyped], bool) -> String
+
+    # : (Integer) -> String
+    def format_permissions: (Integer) -> String
+
+    # : (Integer) -> String
+    def format_size: (Integer) -> String
+
+    # : () -> void
+    def update_offset: () -> void
+  end
+end

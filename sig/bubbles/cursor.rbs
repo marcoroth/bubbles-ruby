@@ -1,0 +1,87 @@
+# Generated from lib/bubbles/cursor.rb with RBS::Inline
+
+module Bubbles
+  # Cursor provides cursor functionality for text input components.
+  #
+  # Example:
+  #   cursor = Bubbles::Cursor.new
+  #   cursor.char = "a"
+  #   cursor.focus
+  #
+  #   # In update:
+  #   cursor, command = cursor.update(message)
+  #
+  #   # In view:
+  #   cursor.view
+  class Cursor
+    MODE_BLINK: Symbol
+
+    MODE_STATIC: Symbol
+
+    MODE_HIDE: Symbol
+
+    DEFAULT_BLINK_SPEED: Float
+
+    class InitialBlinkMessage < Bubbletea::Message
+    end
+
+    class BlinkMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      # : (id: Integer, tag: Integer) -> void
+      def initialize: (id: Integer, tag: Integer) -> void
+    end
+
+    class BlinkCanceledMessage < Bubbletea::Message
+    end
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_reader id: Integer
+
+    attr_reader mode: Symbol
+
+    attr_accessor char: String
+
+    attr_accessor blink_speed: Float
+
+    attr_accessor style: Lipgloss::Style?
+
+    attr_accessor text_style: Lipgloss::Style?
+
+    # : () -> void
+    def initialize: () -> void
+
+    # : () -> bool
+    def blink?: () -> bool
+
+    # : () -> bool
+    def focused?: () -> bool
+
+    # : (Bubbletea::Message) -> [Cursor, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Cursor, Bubbletea::Command? ]
+
+    # : (Symbol) -> Bubbletea::Command?
+    def set_mode: (Symbol) -> Bubbletea::Command?
+
+    # : () -> Bubbletea::Command?
+    def focus: () -> Bubbletea::Command?
+
+    # : () -> void
+    def blur: () -> void
+
+    # : () -> String
+    def view: () -> String
+
+    # : () -> Bubbletea::SendMessage
+    def self.blink: () -> Bubbletea::SendMessage
+
+    private
+
+    # : () -> Bubbletea::Command?
+    def blink_command: () -> Bubbletea::Command?
+  end
+end

@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Stopwatch demo - elapsed time counter with start/stop/reset
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class StopwatchDemo
+  include Bubbletea::Model
+
+  def initialize
+    @stopwatch = Bubbles::Stopwatch.new(interval: 0.01)
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @time_style = Lipgloss::Style.new.bold(true).foreground("205").width(10)
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @status_style = Lipgloss::Style.new.foreground("99")
+  end
+
+  def init
+    command = @stopwatch.init
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when " ", "space"
+        return [self, @stopwatch.toggle]
+      when "r"
+        return [self, @stopwatch.reset]
+      end
+
+      [self, nil]
+    when Bubbles::Stopwatch::TickMessage, Bubbles::Stopwatch::StartStopMessage, Bubbles::Stopwatch::ResetMessage
+      @stopwatch, command = @stopwatch.update(message)
+
+      [self, command]
+    else
+      [self, nil]
+    end
+  end
+
+  def view
+    status = @stopwatch.running? ? @status_style.render("Running") : @status_style.render("Stopped")
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Stopwatch Demo")
+    lines << ""
+    lines << "  #{@time_style.render(@stopwatch.view)}  #{status}"
+    lines << ""
+    lines << @help_style.render("  space start/stop • r reset • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(StopwatchDemo.new)

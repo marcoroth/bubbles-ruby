@@ -1,0 +1,63 @@
+# Generated from lib/bubbles/key.rb with RBS::Inline
+
+module Bubbles
+  # Key provides helpers for defining and matching key bindings.
+  #
+  # Example:
+  #   # Define key bindings
+  #   KEYS = {
+  #     up: Bubbles::Key.binding(
+  #       keys: ["up", "k"],
+  #       help: ["↑/k", "move up"]
+  #     ),
+  #     down: Bubbles::Key.binding(
+  #       keys: ["down", "j"],
+  #       help: ["↓/j", "move down"]
+  #     ),
+  #     quit: Bubbles::Key.binding(
+  #       keys: ["q", "esc", "ctrl+c"],
+  #       help: ["q", "quit"]
+  #     )
+  #   }
+  #
+  #   # Match in update
+  #   def update(message)
+  #     case message
+  #     when Bubbletea::KeyMessage
+  #       if Bubbles::Key.matches?(message, KEYS[:up])
+  #         # handle up
+  #       elsif Bubbles::Key.matches?(message, KEYS[:down])
+  #         # handle down
+  #       end
+  #     end
+  #   end
+  module Key
+    class Binding
+      attr_accessor keys: Array[String]
+
+      attr_accessor help_key: String?
+
+      attr_accessor help_desc: String?
+
+      attr_accessor enabled: bool
+
+      # : (keys: Array[String], ?help_key: String?, ?help_desc: String?, ?enabled: bool) -> void
+      def initialize: (keys: Array[String], ?help_key: String?, ?help_desc: String?, ?enabled: bool) -> void
+
+      # : () -> bool
+      def enabled?: () -> bool
+
+      # : () -> bool
+      def help?: () -> bool
+
+      # : () -> [String, String]
+      def help: () -> [ String, String ]
+    end
+
+    # : (keys: Array[String] | String, ?help: Array[String]?, ?enabled: bool) -> Binding
+    def self.binding: (keys: Array[String] | String, ?help: Array[String]?, ?enabled: bool) -> Binding
+
+    # : (Bubbletea::KeyMessage, *Binding) -> bool
+    def self.matches?: (Bubbletea::KeyMessage, *Binding) -> bool
+  end
+end

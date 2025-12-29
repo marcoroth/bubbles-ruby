@@ -1,0 +1,97 @@
+# Generated from lib/bubbles/stopwatch.rb with RBS::Inline
+
+module Bubbles
+  # Stopwatch is an elapsed time counter component.
+  #
+  # Example:
+  #   stopwatch = Bubbles::Stopwatch.new
+  #
+  #   # In your model's init:
+  #   def init
+  #     [self, @stopwatch.init]
+  #   end
+  #
+  #   # In your model's update:
+  #   def update(message)
+  #     case message
+  #     when Bubbles::Stopwatch::TickMessage, Bubbles::Stopwatch::StartStopMessage, Bubbles::Stopwatch::ResetMessage
+  #       @stopwatch, command = @stopwatch.update(message)
+  #
+  #       [self, command]
+  #     end
+  #   end
+  class Stopwatch
+    class TickMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      # : (id: Integer, tag: Integer) -> void
+      def initialize: (id: Integer, tag: Integer) -> void
+    end
+
+    class StartStopMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader running: bool
+
+      # : (id: Integer, running: bool) -> void
+      def initialize: (id: Integer, running: bool) -> void
+    end
+
+    class ResetMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      # : (id: Integer) -> void
+      def initialize: (id: Integer) -> void
+    end
+
+    self.@id_mutex: Mutex
+
+    self.@next_id: Integer
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_reader elapsed: Float
+
+    attr_reader interval: Float
+
+    attr_reader id: Integer
+
+    # : (?interval: Float) -> void
+    def initialize: (?interval: Float) -> void
+
+    # : () -> Bubbletea::Command
+    def init: () -> Bubbletea::Command
+
+    # : () -> bool
+    def running?: () -> bool
+
+    # : (Bubbletea::Message) -> [Stopwatch, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Stopwatch, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    # : () -> Bubbletea::Command
+    def start: () -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command
+    def stop: () -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command
+    def toggle: () -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command
+    def reset: () -> Bubbletea::Command
+
+    private
+
+    # : () -> Bubbletea::Command?
+    def tick: () -> Bubbletea::Command?
+
+    # : (Float) -> String
+    def format_duration: (Float) -> String
+  end
+end

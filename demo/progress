@@ -1,0 +1,81 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Progress bar demo
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class TickMessage < Bubbletea::Message
+end
+
+class ProgressDemo
+  include Bubbletea::Model
+
+  def initialize
+    @progress = Bubbles::Progress.new(width: 50)
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+  end
+
+  def init
+    [self, tick_command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "r"
+        @progress = Bubbles::Progress.new(width: 50)
+
+        return [self, tick_command]
+      end
+
+      [self, nil]
+    when Bubbles::Progress::FrameMessage
+      _progress, command = @progress.update(message)
+
+      [self, command]
+    when TickMessage
+      if @progress.percent < 1.0
+        command = @progress.increment_percent(0.25)
+        return [self, Bubbletea.batch(command, tick_command)]
+      end
+
+      [self, nil]
+    else
+      [self, nil]
+    end
+  end
+
+  def view
+    complete = @progress.percent >= 1.0 && !@progress.animating?
+    status = complete ? "Complete!" : "Loading..."
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Progress Demo")
+    lines << ""
+    lines << "  #{@progress.view}"
+    lines << ""
+    lines << "  #{status}"
+    lines << ""
+    lines << @help_style.render("  r reset • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+
+  private
+
+  def tick_command
+    Bubbletea.tick(0.8) { TickMessage.new }
+  end
+end
+
+Bubbletea.run(ProgressDemo.new)

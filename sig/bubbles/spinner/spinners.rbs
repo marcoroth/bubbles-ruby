@@ -1,0 +1,32 @@
+# Generated from lib/bubbles/spinner/spinners.rb with RBS::Inline
+
+module Bubbles
+  module Spinners
+    LINE: Hash[Symbol, Array[String] | Float]
+
+    DOT: Hash[Symbol, Array[String] | Float]
+
+    MINI_DOT: Hash[Symbol, Array[String] | Float]
+
+    JUMP: Hash[Symbol, Array[String] | Float]
+
+    PULSE: Hash[Symbol, Array[String] | Float]
+
+    POINTS: Hash[Symbol, Array[String] | Float]
+
+    GLOBE: Hash[Symbol, Array[String] | Float]
+
+    MOON: Hash[Symbol, Array[String] | Float]
+
+    MONKEY: Hash[Symbol, Array[String] | Float]
+
+    METER: Hash[Symbol, Array[String] | Float]
+
+    HAMBURGER: Hash[Symbol, Array[String] | Float]
+
+    ELLIPSIS: Hash[Symbol, Array[String] | Float]
+
+    # @rbs DEFAULT:
+    DEFAULT: Hash[Symbol, Array[String] | Float]
+  end
+end

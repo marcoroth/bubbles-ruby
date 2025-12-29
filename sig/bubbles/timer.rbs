@@ -1,0 +1,107 @@
+# Generated from lib/bubbles/timer.rb with RBS::Inline
+
+module Bubbles
+  # Timer is a countdown timer component.
+  #
+  # Example:
+  #   timer = Bubbles::Timer.new(60.0)  # 60 second countdown
+  #
+  #   # In your model's init:
+  #   def init
+  #     [self, @timer.init]
+  #   end
+  #
+  #   # In your model's update:
+  #   def update(message)
+  #     case message
+  #     when Bubbles::Timer::TickMessage, Bubbles::Timer::StartStopMessage
+  #       @timer, command = @timer.update(message)
+  #       [self, command]
+  #     when Bubbles::Timer::TimeoutMessage
+  #       # Timer finished!
+  #       [self, nil]
+  #     end
+  #   end
+  class Timer
+    class TickMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      attr_reader timeout: bool
+
+      # : (id: Integer, tag: Integer, ?timeout: bool) -> void
+      def initialize: (id: Integer, tag: Integer, ?timeout: bool) -> void
+    end
+
+    class TimeoutMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      # : (id: Integer) -> void
+      def initialize: (id: Integer) -> void
+    end
+
+    class StartStopMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader running: bool
+
+      # : (id: Integer, running: bool) -> void
+      def initialize: (id: Integer, running: bool) -> void
+    end
+
+    self.@id_mutex: Mutex
+
+    self.@next_id: Integer
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_reader timeout: Float
+
+    attr_reader interval: Float
+
+    attr_reader id: Integer
+
+    # : (Float, ?interval: Float) -> void
+    def initialize: (Float, ?interval: Float) -> void
+
+    # : () -> Bubbletea::Command?
+    def init: () -> Bubbletea::Command?
+
+    # : () -> bool
+    def running?: () -> bool
+
+    # : () -> bool
+    def timed_out?: () -> bool
+
+    # : (Bubbletea::Message) -> [Timer, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Timer, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    # : () -> Bubbletea::Command
+    def start: () -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command
+    def stop: () -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command
+    def toggle: () -> Bubbletea::Command
+
+    private
+
+    # : (bool) -> Bubbletea::Command
+    def start_stop: (bool) -> Bubbletea::Command
+
+    # : () -> Bubbletea::Command?
+    def tick: () -> Bubbletea::Command?
+
+    # : () -> Bubbletea::Command?
+    def timeout_command: () -> Bubbletea::Command?
+
+    # : (Float) -> String
+    def format_duration: (Float) -> String
+  end
+end

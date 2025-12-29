@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# FilePicker demo - browse and select files
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class FilePickerDemo
+  include Bubbletea::Model
+
+  def initialize
+    @picker = Bubbles::FilePicker.new(directory: ".")
+    @picker.height = 12
+    @picker.show_hidden = false
+
+    @picker.cursor_style = Lipgloss::Style.new.foreground("212")
+    @picker.dir_style = Lipgloss::Style.new.foreground("99")
+    @picker.file_style = Lipgloss::Style.new.foreground("255")
+    @picker.selected_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @picker.permission_style = Lipgloss::Style.new.foreground("240")
+    @picker.size_style = Lipgloss::Style.new.foreground("240")
+    @picker.disabled_style = Lipgloss::Style.new.foreground("241")
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @selected_style = Lipgloss::Style.new.bold(true).foreground("120")
+
+    @selected_file = nil
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "."
+        @picker.show_hidden = !@picker.show_hidden
+        @picker.current_directory = @picker.current_directory # rubocop:disable Lint/SelfAssignment -- we need this as this refreshes the view
+
+        return [self, nil]
+      end
+    end
+
+    @picker, command = @picker.update(message)
+
+    @selected_file = @picker.path if @picker.did_select_file?
+
+    [self, command]
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  File Picker")
+    lines << ""
+    lines << @picker.view.gsub(/^/, "  ")
+    lines << ""
+
+    lines << if @selected_file
+               @selected_style.render("  Selected: #{@selected_file}")
+             else
+               ""
+             end
+
+    lines << ""
+    lines << @help_style.render("  j/k or arrows navigate • enter select • h/backspace go up • . toggle hidden • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(FilePickerDemo.new)

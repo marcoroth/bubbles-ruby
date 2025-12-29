@@ -1,0 +1,111 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Cursor demo - blinking cursor component
+
+require "bundler/setup"
+require "lipgloss"
+require "bubbletea"
+require "bubbles"
+
+class CursorDemo
+  include Bubbletea::Model
+
+  MODES = [
+    { name: "Blink", mode: :blink },
+    { name: "Static", mode: :static },
+    { name: "Hide", mode: :hide },
+  ].freeze
+
+  def initialize
+    @cursor = Bubbles::Cursor.new
+    @cursor.char = "_"
+
+    @mode_index = 0
+    @focused = true
+    @text = "Hello, World!"
+    @cursor_pos = @text.length
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @info_style = Lipgloss::Style.new.foreground("99")
+    @text_style = Lipgloss::Style.new.foreground("255")
+  end
+
+  def init
+    command = @cursor.focus
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "tab"
+        @mode_index = (@mode_index + 1) % MODES.length
+        command = @cursor.set_mode(MODES[@mode_index][:mode])
+
+        return [self, command]
+      when "f"
+        @focused = !@focused
+
+        return [self, @cursor.focus] if @focused
+
+        @cursor.blur
+
+        return [self, nil]
+      when "left"
+        @cursor_pos = [@cursor_pos - 1, 0].max
+      when "right"
+        @cursor_pos = [@cursor_pos + 1, @text.length].min
+      end
+
+    when Bubbles::Cursor::BlinkMessage, Bubbles::Cursor::InitialBlinkMessage
+      @cursor, command = @cursor.update(message)
+
+      return [self, command]
+    end
+
+    [self, nil]
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @title_style.render("  Cursor Demo")
+    lines << ""
+
+    before = @text[0...@cursor_pos]
+    char_at = @text[@cursor_pos] || " "
+    after = @text[(@cursor_pos + 1)..] || ""
+
+    @cursor.char = char_at
+
+    text_line = "  #{@text_style.render(before)}#{@cursor.view}#{@text_style.render(after)}"
+    lines << text_line
+    lines << ""
+
+    mode_name = MODES[@mode_index][:name]
+    focus_state = @focused ? "Focused" : "Blurred"
+
+    lines << @info_style.render("  Mode: #{mode_name} | State: #{focus_state} | Position: #{@cursor_pos}")
+    lines << ""
+
+    lines << "  Modes:"
+    lines << "    Blink  - Cursor blinks on/off"
+    lines << "    Static - Cursor always visible"
+    lines << "    Hide   - Cursor invisible"
+    lines << ""
+
+    lines << @help_style.render("  tab cycle mode | f toggle focus | arrows move cursor | q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(CursorDemo.new)

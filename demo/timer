@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Timer demo - countdown timer with start/stop/reset
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+class TimerDemo
+  include Bubbletea::Model
+
+  def initialize
+    @timer = Bubbles::Timer.new(60.0)
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @timer_style = Lipgloss::Style.new.bold(true).foreground("205").width(10)
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @status_style = Lipgloss::Style.new.foreground("99")
+  end
+
+  def init
+    command = @timer.init
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when " ", "space"
+        return [self, @timer.toggle]
+      when "r"
+        @timer = Bubbles::Timer.new(60.0)
+        return [self, @timer.init]
+      end
+
+      [self, nil]
+    when Bubbles::Timer::TickMessage, Bubbles::Timer::StartStopMessage
+      @timer, command = @timer.update(message)
+
+      [self, command]
+    else
+      [self, nil]
+    end
+  end
+
+  def view
+    status = if @timer.timed_out?
+               @status_style.render("Time's up!")
+             elsif @timer.running?
+               @status_style.render("Running")
+             else
+               @status_style.render("Paused")
+             end
+
+    lines = []
+    lines << ""
+    lines << @title_style.render("  Timer Demo")
+    lines << ""
+    lines << "  #{@timer_style.render(@timer.view)}  #{status}"
+    lines << ""
+    lines << @help_style.render("  space start/stop • r reset • q quit")
+    lines << ""
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(TimerDemo.new)

@@ -1,0 +1,74 @@
+# Generated from lib/bubbles/spinner.rb with RBS::Inline
+
+module Bubbles
+  # Spinner is an animated activity indicator component.
+  #
+  # Example:
+  #   spinner = Bubbles::Spinner.new(spinner: Bubbles::Spinners::DOT)
+  #   spinner.style = Lipgloss::Style.new.foreground("205")
+  #
+  #   # In your model's init:
+  #   def init
+  #     [self, @spinner.tick]
+  #   end
+  #
+  #   # In your model's update:
+  #   def update(message)
+  #     case message
+  #     when Bubbles::Spinner::TickMessage
+  #       @spinner, command = @spinner.update(message)
+  #       [self, command]
+  #     end
+  #   end
+  #
+  #   # In your model's view:
+  #   def view
+  #     "#{@spinner.view} Loading..."
+  #   end
+  class Spinner
+    class TickMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      # : (id: Integer, tag: Integer) -> void
+      def initialize: (id: Integer, tag: Integer) -> void
+    end
+
+    self.@next_id: Integer
+
+    self.@id_mutex: Mutex
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_reader id: Integer
+
+    attr_accessor spinner: Hash[Symbol, untyped]
+
+    attr_accessor style: Lipgloss::Style?
+
+    # : (?spinner: Hash[Symbol, untyped], ?style: Lipgloss::Style?) -> void
+    def initialize: (?spinner: Hash[Symbol, untyped], ?style: Lipgloss::Style?) -> void
+
+    # : () -> [Spinner, Bubbletea::Command]
+    def init: () -> [ Spinner, Bubbletea::Command ]
+
+    # : (Bubbletea::Message) -> [Spinner, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ Spinner, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    # : () -> Bubbletea::Command
+    def tick: () -> Bubbletea::Command
+
+    private
+
+    # : () -> Array[String]
+    def frames: () -> Array[String]
+
+    # : () -> Float
+    def fps: () -> Float
+  end
+end

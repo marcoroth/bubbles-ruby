@@ -1,0 +1,90 @@
+# Generated from lib/bubbles/paginator.rb with RBS::Inline
+
+module Bubbles
+  # Paginator provides pagination logic and rendering.
+  #
+  # Example:
+  #   items = (1..100).to_a
+  #   paginator = Bubbles::Paginator.new(per_page: 10)
+  #   paginator.update_total_pages(items.length)
+  #
+  #   # Get current page items
+  #   start_index, end_index = paginator.slice_bounds(items.length)
+  #   current_items = items[start_index...end_index]
+  #
+  #   # Navigation
+  #   paginator.next_page
+  #   paginator.prev_page
+  #
+  #   # Render pagination indicator
+  #   puts paginator.view
+  class Paginator
+    ARABIC: Symbol
+
+    DOTS: Symbol
+
+    attr_accessor type: Symbol
+
+    attr_accessor page: Integer
+
+    attr_accessor per_page: Integer
+
+    attr_accessor total_pages: Integer
+
+    attr_accessor active_dot: String
+
+    attr_accessor inactive_dot: String
+
+    attr_accessor arabic_format: String
+
+    attr_accessor key_style: Lipgloss::Style?
+
+    attr_accessor active_dot_style: Lipgloss::Style?
+
+    attr_accessor inactive_dot_style: Lipgloss::Style?
+
+    # : (?type: Symbol, ?per_page: Integer) -> void
+    def initialize: (?type: Symbol, ?per_page: Integer) -> void
+
+    # : (Integer) -> void
+    def update_total_pages: (Integer) -> void
+
+    # : (Integer) -> Integer
+    def items_on_page: (Integer) -> Integer
+
+    # : (Integer) -> [Integer, Integer]
+    def slice_bounds: (Integer) -> [ Integer, Integer ]
+
+    # : () -> bool
+    def prev_page?: () -> bool
+
+    # : () -> bool
+    def next_page?: () -> bool
+
+    # : () -> bool
+    def prev_page: () -> bool
+
+    # : () -> bool
+    def next_page: () -> bool
+
+    # : (Integer) -> bool
+    def go_to_page: (Integer) -> bool
+
+    # : () -> String
+    def view: () -> String
+
+    private
+
+    # : () -> String
+    def arabic_view: () -> String
+
+    # : () -> String
+    def dots_view: () -> String
+
+    # : () -> String
+    def render_active_dot: () -> String
+
+    # : () -> String
+    def render_inactive_dot: () -> String
+  end
+end

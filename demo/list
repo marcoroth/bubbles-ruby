@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# List demo - interactive list with filtering
+
+require "bundler/setup"
+require "lipgloss"
+require "bubbletea"
+require "bubbles"
+
+ITEMS = [
+  { title: "Raspberry Pi Zero", description: "Tiny computer" },
+  { title: "Arduino Uno", description: "Microcontroller board" },
+  { title: "ESP32", description: "WiFi microcontroller" },
+  { title: "Raspberry Pi 4", description: "Quad-core computer" },
+  { title: "BeagleBone Black", description: "Linux computer" },
+  { title: "Adafruit Feather", description: "Development board" },
+  { title: "Teensy 4.0", description: "Fast microcontroller" },
+  { title: "BBC micro:bit", description: "Educational board" },
+  { title: "STM32 Blue Pill", description: "ARM development" },
+  { title: "Nvidia Jetson Nano", description: "AI computer" },
+].freeze
+
+class ListDemo
+  include Bubbletea::Model
+
+  def initialize
+    @list = Bubbles::List.new(ITEMS, width: 50, height: 15)
+    @list.title = "Development Boards"
+
+    @list.title_style = Lipgloss::Style.new.bold(true).foreground("212")
+    @list.selected_item_style = Lipgloss::Style.new.foreground("212").bold(true)
+    @list.item_style = Lipgloss::Style.new.foreground("252")
+
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @selected_style = Lipgloss::Style.new.foreground("99")
+  end
+
+  def init
+    [self, nil]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "ctrl+c"
+        return [self, Bubbletea.quit] unless @list.filter_state == Bubbles::List::FILTERING
+      when "enter"
+        if @list.filter_state != Bubbles::List::FILTERING && @list.selected_item
+          command = @list.set_status_message("  Selected: #{@list.selected_item[:title]}")
+          @list, = @list.update(message)
+
+          return [self, command]
+        end
+      end
+    end
+
+    @list, command = @list.update(message)
+
+    [self, command]
+  end
+
+  def view
+    lines = []
+
+    lines << ""
+    lines << @list.view
+    lines << ""
+
+    if @list.selected_item
+      lines << @selected_style.render("  #{@list.selected_item[:description]}")
+      lines << ""
+    end
+
+    help = case @list.filter_state
+           when Bubbles::List::FILTERING
+             "  type to filter • enter apply • esc cancel"
+           when Bubbles::List::FILTER_APPLIED
+             "  esc clear filter • / filter again • q quit"
+           else
+             "  ↑/↓ navigate • enter select • / filter • q quit"
+           end
+
+    lines << @help_style.render(help)
+    lines << ""
+
+    lines.join("\n")
+  end
+end
+
+Bubbletea.run(ListDemo.new)
