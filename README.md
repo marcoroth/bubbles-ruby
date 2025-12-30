@@ -53,7 +53,7 @@ gem install bubbles
 require "bubbles"
 
 spinner = Bubbles::Spinner.new
-spinner.spinner = Bubbles::Spinners::DOTS
+spinner.spinner = Bubbles::Spinners::DOT
 ```
 
 **In your update method:**
@@ -507,7 +507,7 @@ class MyApp
 
   def initialize
     @spinner = Bubbles::Spinner.new
-    @spinner.spinner = Bubbles::Spinners::DOTS
+    @spinner.spinner = Bubbles::Spinners::DOT
   end
 
   def init
