@@ -81,8 +81,5 @@ module Bubbles
 
     # : (String) -> String
     def truncate_to_width: (String) -> String
-
-    # : (String) -> String
-    def strip_ansi: (String) -> String
   end
 end

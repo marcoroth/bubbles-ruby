@@ -3,6 +3,7 @@
 require "bubbletea"
 
 require_relative "bubbles/version"
+require_relative "bubbles/ansi"
 require_relative "bubbles/spinner"
 require_relative "bubbles/timer"
 require_relative "bubbles/stopwatch"

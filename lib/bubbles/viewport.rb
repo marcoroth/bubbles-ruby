@@ -78,7 +78,7 @@ module Bubbles
     def content=(content)
       content = content.gsub("\r\n", "\n")
       @lines = content.split("\n", -1)
-      @longest_line_width = @lines.map { |l| strip_ansi(l).length }.max || 0
+      @longest_line_width = @lines.map { |l| ANSI.strip(l).length }.max || 0
 
       goto_bottom if @y_offset > @lines.length - 1
     end
@@ -273,24 +273,11 @@ module Bubbles
         end
 
         lines = lines.map do |line|
-          cut_string(line, @x_offset, @x_offset + w)
+          ANSI.cut_string(line, @x_offset, @x_offset + w)
         end
       end
 
       lines
-    end
-
-    #: (String, Integer, Integer) -> String
-    def cut_string(string, start_column, end_column)
-      plain = strip_ansi(string)
-      return "" if start_column >= plain.length
-
-      plain[start_column...end_column] || ""
-    end
-
-    #: (String) -> String
-    def strip_ansi(string)
-      string.gsub(/\e\[[0-9;]*[A-Za-z]/, "")
     end
   end
 end

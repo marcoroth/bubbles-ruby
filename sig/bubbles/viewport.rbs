@@ -115,11 +115,5 @@ module Bubbles
 
     # : () -> Array[String]
     def visible_lines: () -> Array[String]
-
-    # : (String, Integer, Integer) -> String
-    def cut_string: (String, Integer, Integer) -> String
-
-    # : (String) -> String
-    def strip_ansi: (String) -> String
   end
 end
