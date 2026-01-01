@@ -29,6 +29,7 @@ gem install bubbles
 | Component | Description |
 |-----------|-------------|
 | [Spinner](#spinner) | Loading spinners with multiple styles |
+| [CrypticSpinner](#crypticspinner) | Animated gradient spinner with cryptic characters |
 | [Progress](#progress) | Animated progress bars |
 | [Timer](#timer) | Countdown timer |
 | [Stopwatch](#stopwatch) | Elapsed time counter |
@@ -84,6 +85,71 @@ Bubbles::Spinners::METER
 Bubbles::Spinners::HAMBURGER
 Bubbles::Spinners::ELLIPSIS
 ```
+
+### CrypticSpinner
+
+**Animated gradient spinner with cryptic characters (inspired by [Charm CLI](https://github.com/charmbracelet/crush)):**
+
+```ruby
+spinner = Bubbles::CrypticSpinner.new(
+  size: 15,
+  label: "Thinking",
+  cycle_colors: true
+)
+```
+
+**In your update method:**
+
+```ruby
+case message
+when Bubbles::CrypticSpinner::TickMessage
+  spinner, command = spinner.update(message)
+end
+```
+
+**In your view method:**
+
+```ruby
+spinner.view
+```
+
+**Custom colors (using CharmTone palette):**
+
+```ruby
+spinner = Bubbles::CrypticSpinner.new(
+  size: 15,
+  label: "Processing",
+  color_a: "#6B50FF",  # Charple (purple)
+  color_b: "#FF60FF",  # Dolly (pink)
+  label_color: "#DFDBDD",
+  cycle_colors: true
+)
+```
+
+**Multi-row (matrix style):**
+
+```ruby
+spinner = Bubbles::CrypticSpinner.new(
+  size: 40,
+  rows: 5,
+  label: "Decrypting",
+  color_a: "#00ff00",
+  color_b: "#003300",
+  cycle_colors: true
+)
+```
+
+**Options:**
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `size` | 10 | Number of cycling characters |
+| `rows` | 1 | Number of rows (for matrix effect) |
+| `label` | "" | Text label after the animation |
+| `color_a` | "#6B50FF" | Start color of gradient |
+| `color_b` | "#FF60FF" | End color of gradient |
+| `label_color` | "#DFDBDD" | Color of the label text |
+| `cycle_colors` | false | Animate gradient movement |
 
 ### Progress
 
@@ -555,6 +621,7 @@ bundle exec rake test
 
 ```bash
 ./demo/spinner
+./demo/cryptic_spinner
 ./demo/progress
 ./demo/textinput
 ./demo/textarea
