@@ -1,0 +1,23 @@
+# Generated from lib/bubbles/ansi.rb with RBS::Inline
+
+module Bubbles
+  module ANSI
+    PATTERN: Regexp
+
+    # Extracts a visible character range from a string while preserving ANSI escape codes.
+    # ANSI codes before the start position are carried forward and applied to the result.
+    # A reset sequence is appended if the result contains any ANSI codes.
+    #
+    # @rbs string String -- the input string potentially containing ANSI codes
+    # @rbs start_column Integer -- the starting visible character position (0-indexed)
+    # @rbs end_column Integer -- the ending visible character position (exclusive)
+    # @rbs return String -- the extracted substring with ANSI codes preserved
+    def self.cut_string: (String string, Integer start_column, Integer end_column) -> String
+
+    # Removes all ANSI escape codes from a string.
+    #
+    # @rbs string String -- the input string
+    # @rbs return String -- the string with all ANSI codes removed
+    def self.strip: (String string) -> String
+  end
+end

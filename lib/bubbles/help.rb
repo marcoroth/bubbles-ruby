@@ -152,7 +152,7 @@ module Bubbles
       lines = text.split("\n")
 
       lines.map do |line|
-        plain = strip_ansi(line)
+        plain = ANSI.strip(line)
 
         if plain.length > @width
           line[0, @width]
@@ -160,11 +160,6 @@ module Bubbles
           line
         end
       end.join("\n")
-    end
-
-    #: (String) -> String
-    def strip_ansi(str)
-      str.gsub(/\e\[[0-9;]*[A-Za-z]/, "")
     end
   end
 end
