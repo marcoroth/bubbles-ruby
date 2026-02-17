@@ -88,7 +88,7 @@ Bubbles::Spinners::ELLIPSIS
 
 ### CrypticSpinner
 
-**Animated gradient spinner with cryptic characters (inspired by [Charm CLI](https://github.com/charmbracelet/crush)):**
+**Animated gradient spinner with cryptic characters (inspired by [Crush](https://github.com/charmbracelet/crush)):**
 
 ```ruby
 spinner = Bubbles::CrypticSpinner.new(
