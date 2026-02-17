@@ -167,7 +167,7 @@ module Bubbles
     #: () -> String
     def view
       elapsed = Time.now - @start_time
-      lines = []
+      lines = [] #: Array[String]
 
       @rows.times do |row|
         line = String.new
@@ -207,9 +207,11 @@ module Bubbles
     #: () -> Integer
     def width
       w = @size
+
       unless @label.empty?
-        w += 1 + @label.length + ELLIPSIS_FRAMES.max_by(&:length).length
+        w += 1 + @label.length + (ELLIPSIS_FRAMES.max_by(&:length) || "").length
       end
+
       w
     end
 
