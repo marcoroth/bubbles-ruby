@@ -1,0 +1,188 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# CrypticSpinner demo - animated spinner with gradient colors and cryptic characters
+
+require "bundler/setup"
+require "bubbletea"
+require "lipgloss"
+require "bubbles"
+
+CHARMTONE = {
+  charple: "#6B50FF",  # Primary purple
+  dolly: "#FF60FF",    # Secondary pink/magenta
+  julep: "#00FFB2",    # Bright green
+  bok: "#68FFD6",      # Light teal
+  citron: "#E8FF27",   # Yellow-green
+  zest: "#E8FE96",     # Pale yellow
+  malibu: "#00A4FF",   # Bright blue
+  coral: "#FF577D",    # Coral red
+  ash: "#DFDBDD",      # Light gray (label)
+  squid: "#858392",    # Medium gray
+}.freeze
+
+PRESETS = [
+  {
+    name: "CharmTone (Charple → Dolly)",
+    size: 15,
+    label: "Thinking",
+    color_a: CHARMTONE[:charple],
+    color_b: CHARMTONE[:dolly],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Working (Charple → Dolly)",
+    size: 10,
+    label: "Working",
+    color_a: CHARMTONE[:charple],
+    color_b: CHARMTONE[:dolly],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Generating (Charple → Dolly)",
+    size: 10,
+    label: "Generating",
+    color_a: CHARMTONE[:charple],
+    color_b: CHARMTONE[:dolly],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Ocean (Malibu → Julep)",
+    size: 15,
+    label: "Processing",
+    color_a: CHARMTONE[:malibu],
+    color_b: CHARMTONE[:julep],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Sunset (Coral → Citron)",
+    size: 18,
+    label: "Loading",
+    color_a: CHARMTONE[:coral],
+    color_b: CHARMTONE[:citron],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Minimal (no label)",
+    size: 10,
+    rows: 1,
+    label: "",
+    color_a: CHARMTONE[:charple],
+    color_b: CHARMTONE[:dolly],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Matrix (3 rows)",
+    size: 40,
+    rows: 3,
+    label: "",
+    color_a: CHARMTONE[:charple],
+    color_b: CHARMTONE[:dolly],
+    label_color: CHARMTONE[:ash],
+    cycle_colors: true,
+  },
+  {
+    name: "Matrix (5 rows)",
+    size: 50,
+    rows: 5,
+    label: "Decrypting",
+    color_a: "#00ff00",
+    color_b: "#003300",
+    label_color: "#00ff00",
+    cycle_colors: true,
+  },
+].freeze
+
+class CrypticSpinnerDemo
+  include Bubbletea::Model
+
+  def initialize
+    @index = 0
+    @spinner = create_spinner
+
+    @title_style = Lipgloss::Style.new.bold(true).foreground("#ff79c6")
+    @help_style = Lipgloss::Style.new.foreground("241")
+    @name_style = Lipgloss::Style.new.foreground("#8be9fd").italic(true)
+    @box_style = Lipgloss::Style.new.border_style(:rounded).border_foreground("#44475a").padding_left(2).padding_right(2)
+  end
+
+  def init
+    _, command = @spinner.init
+
+    [self, command]
+  end
+
+  def update(message)
+    case message
+    when Bubbletea::KeyMessage
+      case message.to_s
+      when "q", "esc", "ctrl+c"
+        return [self, Bubbletea.quit]
+      when "left", "h"
+        @index = (@index - 1) % PRESETS.length
+        return [self, switch_preset]
+      when "right", "l"
+        @index = (@index + 1) % PRESETS.length
+        return [self, switch_preset]
+      end
+
+      [self, nil]
+    when Bubbles::CrypticSpinner::TickMessage
+      @spinner, command = @spinner.update(message)
+
+      [self, command]
+    else
+      [self, nil]
+    end
+  end
+
+  def view
+    lines = []
+    preset = current_preset
+
+    lines << ""
+    lines << @title_style.render("  CrypticSpinner Demo")
+    lines << ""
+    lines << @box_style.render(@spinner.view)
+    lines << ""
+    lines << "  Preset: #{@name_style.render(preset[:name])}"
+    lines << ""
+    lines << @help_style.render("  ←/→ change preset • q quit")
+    lines << ""
+
+    lines.join("\n")
+  end
+
+  private
+
+  def current_preset
+    PRESETS[@index]
+  end
+
+  def create_spinner
+    preset = current_preset
+    Bubbles::CrypticSpinner.new(
+      size: preset[:size],
+      rows: preset[:rows] || 1,
+      label: preset[:label],
+      label_color: preset[:label_color] || Bubbles::CrypticSpinner::DEFAULT_LABEL_COLOR,
+      color_a: preset[:color_a],
+      color_b: preset[:color_b],
+      cycle_colors: preset[:cycle_colors]
+    )
+  end
+
+  def switch_preset
+    @spinner = create_spinner
+    _, command = @spinner.init
+    command
+  end
+end
+
+Bubbletea.run(CrypticSpinnerDemo.new)

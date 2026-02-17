@@ -18,6 +18,7 @@ require_relative "bubbles/viewport"
 require_relative "bubbles/list"
 require_relative "bubbles/table"
 require_relative "bubbles/file_picker"
+require_relative "bubbles/cryptic_spinner"
 
 module Bubbles
 end

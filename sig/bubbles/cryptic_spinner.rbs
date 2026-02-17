@@ -1,0 +1,146 @@
+# Generated from lib/bubbles/cryptic_spinner.rb with RBS::Inline
+
+module Bubbles
+  # CrypticSpinner is an animated activity indicator that displays cycling
+  # random characters with gradient colors. Inspired by the Charm CLI crush
+  # animation.
+  #
+  # Example:
+  #   spinner = Bubbles::CrypticSpinner.new(
+  #     size: 15,
+  #     rows: 1,
+  #     label: "Loading",
+  #     color_a: "#ff0000",
+  #     color_b: "#0000ff",
+  #     cycle_colors: true
+  #   )
+  #
+  # Multi-row example (matrix style):
+  #   spinner = Bubbles::CrypticSpinner.new(
+  #     size: 30,
+  #     rows: 5,
+  #     cycle_colors: true
+  #   )
+  #
+  #   # In your model's init:
+  #   def init
+  #     [self, @spinner.tick]
+  #   end
+  #
+  #   # In your model's update:
+  #   def update(message)
+  #     case message
+  #     when Bubbles::CrypticSpinner::TickMessage
+  #       @spinner, command = @spinner.update(message)
+  #       [self, command]
+  #     end
+  #   end
+  #
+  #   # In your model's view:
+  #   def view
+  #     @spinner.view
+  #   end
+  class CrypticSpinner
+    AVAILABLE_CHARS: Array[String]
+
+    INITIAL_CHAR: String
+
+    ELLIPSIS_FRAMES: Array[String]
+
+    FPS: Integer
+
+    FRAME_DURATION: Float
+
+    MAX_BIRTH_OFFSET: Float
+
+    ELLIPSIS_ANIM_SPEED: Integer
+
+    DEFAULT_SIZE: Integer
+
+    DEFAULT_ROWS: Integer
+
+    DEFAULT_COLOR_A: String
+
+    DEFAULT_COLOR_B: String
+
+    DEFAULT_LABEL_COLOR: String
+
+    class TickMessage < Bubbletea::Message
+      attr_reader id: Integer
+
+      attr_reader tag: Integer
+
+      # : (id: Integer, tag: Integer) -> void
+      def initialize: (id: Integer, tag: Integer) -> void
+    end
+
+    self.@id_mutex: Mutex
+
+    self.@next_id: Integer
+
+    # : () -> Integer
+    def self.next_id: () -> Integer
+
+    attr_reader id: Integer
+
+    attr_reader size: Integer
+
+    attr_reader rows: Integer
+
+    attr_reader label: String
+
+    attr_reader label_color: String
+
+    attr_reader color_a: String
+
+    attr_reader color_b: String
+
+    attr_reader cycle_colors: bool
+
+    # : (
+    # :   ?size: Integer,
+    # :   ?rows: Integer,
+    # :   ?label: String,
+    # :   ?label_color: String,
+    # :   ?color_a: String,
+    # :   ?color_b: String,
+    # :   ?cycle_colors: bool
+    # : ) -> void
+    def initialize: (?size: untyped, ?rows: untyped, ?label: untyped, ?label_color: untyped, ?color_a: untyped, ?color_b: untyped, ?cycle_colors: untyped) -> untyped
+
+    # : () -> [CrypticSpinner, Bubbletea::Command]
+    def init: () -> [ CrypticSpinner, Bubbletea::Command ]
+
+    # : (Bubbletea::Message) -> [CrypticSpinner, Bubbletea::Command?]
+    def update: (Bubbletea::Message) -> [ CrypticSpinner, Bubbletea::Command? ]
+
+    # : () -> String
+    def view: () -> String
+
+    # : () -> Bubbletea::Command
+    def tick: () -> Bubbletea::Command
+
+    # : () -> Integer
+    def width: () -> Integer
+
+    # : () -> Integer
+    def height: () -> Integer
+
+    # : (String) -> void
+    def set_label: (String) -> void
+
+    private
+
+    # : () -> Array[String]
+    def generate_gradient: () -> Array[String]
+
+    # : () -> void
+    def prerender_frames: () -> void
+
+    # : () -> String
+    def render_label: () -> String
+
+    # : (String) -> String
+    def render_ellipsis: (String) -> String
+  end
+end
