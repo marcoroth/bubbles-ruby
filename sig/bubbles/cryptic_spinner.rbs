@@ -87,7 +87,7 @@ module Bubbles
 
     attr_reader rows: Integer
 
-    attr_reader label: String
+    attr_accessor label: untyped
 
     attr_reader label_color: String
 
@@ -125,9 +125,6 @@ module Bubbles
 
     # : () -> Integer
     def height: () -> Integer
-
-    # : (String) -> void
-    def set_label: (String) -> void
 
     private
 

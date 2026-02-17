@@ -2,5 +2,5 @@
 # rbs_inline: enabled
 
 module Bubbles
-  VERSION = "0.1.0" #: String
+  VERSION = "0.1.1" #: String
 end

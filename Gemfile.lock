@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    bubbles (0.1.0)
+    bubbles (0.1.1)
       bubbletea
       harmonica
       lipgloss
