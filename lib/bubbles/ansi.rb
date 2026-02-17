@@ -26,7 +26,7 @@ module Bubbles
           next unless ansi_sequence
 
           if visible_position < start_column
-            if ansi_sequence == "\e[0m"
+            if ansi_sequence == "\e[0m" # rubocop:disable Metrics/BlockNesting
               active_codes = +""
             else
               active_codes << ansi_sequence
