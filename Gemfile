@@ -8,6 +8,10 @@ gemspec
 # gem "harmonica", path: "../harmonica-ruby"
 # gem "lipgloss", path: "../lipgloss-ruby"
 
+gem "bubbletea"
+gem "harmonica"
+gem "lipgloss"
+
 gem "irb"
 gem "maxitest", github: "marcoroth/maxitest"
 gem "rake", "~> 13.0"

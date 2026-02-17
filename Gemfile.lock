@@ -184,7 +184,6 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
-  ruby
   x86-linux-gnu
   x86-linux-musl
   x86_64-darwin
@@ -194,7 +193,10 @@ PLATFORMS
 
 DEPENDENCIES
   bubbles!
+  bubbletea
+  harmonica
   irb
+  lipgloss
   maxitest!
   rake (~> 13.0)
   rbs-inline
