@@ -23,6 +23,7 @@ module Bubbles
       while scanner_position < string.length
         if string[scanner_position..] =~ /\A(#{PATTERN})/
           ansi_sequence = ::Regexp.last_match(1)
+          next unless ansi_sequence
 
           if visible_position < start_column
             if ansi_sequence == "\e[0m"
@@ -36,10 +37,13 @@ module Bubbles
 
           scanner_position += ansi_sequence.length
         else
+          char = string[scanner_position]
+          next unless char
+
           if visible_position >= start_column && visible_position < end_column
             result << active_codes unless active_codes.empty?
             active_codes = +""
-            result << string[scanner_position]
+            result << char
           end
 
           visible_position += 1
