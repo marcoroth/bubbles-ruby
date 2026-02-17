@@ -124,14 +124,14 @@ class CrypticSpinnerTest < Minitest::Spec
       spinner2 = Bubbles::CrypticSpinner.new
 
       tick_message = Bubbles::CrypticSpinner::TickMessage.new(id: spinner2.id, tag: 0)
-      spinner1, command = spinner1.update(tick_message)
+      _, command = spinner1.update(tick_message)
 
       assert_nil command
     end
 
     it "ignores non-tick messages" do
       spinner = Bubbles::CrypticSpinner.new
-      spinner, command = spinner.update("some message")
+      _, command = spinner.update("some message")
 
       assert_nil command
     end
@@ -169,11 +169,11 @@ class CrypticSpinnerTest < Minitest::Spec
     end
   end
 
-  describe "#set_label" do
+  describe "#label=" do
     it "updates the label" do
       spinner = Bubbles::CrypticSpinner.new(label: "Loading")
 
-      spinner.set_label("Processing")
+      spinner.label = "Processing"
 
       assert_equal "Processing", spinner.label
     end

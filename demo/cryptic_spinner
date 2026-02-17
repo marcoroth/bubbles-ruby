@@ -29,7 +29,7 @@ PRESETS = [
     color_a: CHARMTONE[:charple],
     color_b: CHARMTONE[:dolly],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Working (Charple → Dolly)",
@@ -38,7 +38,7 @@ PRESETS = [
     color_a: CHARMTONE[:charple],
     color_b: CHARMTONE[:dolly],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Generating (Charple → Dolly)",
@@ -47,7 +47,7 @@ PRESETS = [
     color_a: CHARMTONE[:charple],
     color_b: CHARMTONE[:dolly],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Ocean (Malibu → Julep)",
@@ -56,7 +56,7 @@ PRESETS = [
     color_a: CHARMTONE[:malibu],
     color_b: CHARMTONE[:julep],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Sunset (Coral → Citron)",
@@ -65,7 +65,7 @@ PRESETS = [
     color_a: CHARMTONE[:coral],
     color_b: CHARMTONE[:citron],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Minimal (no label)",
@@ -75,7 +75,7 @@ PRESETS = [
     color_a: CHARMTONE[:charple],
     color_b: CHARMTONE[:dolly],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Matrix (3 rows)",
@@ -85,7 +85,7 @@ PRESETS = [
     color_a: CHARMTONE[:charple],
     color_b: CHARMTONE[:dolly],
     label_color: CHARMTONE[:ash],
-    cycle_colors: true
+    cycle_colors: true,
   },
   {
     name: "Matrix (5 rows)",
@@ -95,8 +95,8 @@ PRESETS = [
     color_a: "#00ff00",
     color_b: "#003300",
     label_color: "#00ff00",
-    cycle_colors: true
-  }
+    cycle_colors: true,
+  },
 ].freeze
 
 class CrypticSpinnerDemo

@@ -46,7 +46,7 @@ module Bubbles
   #
   class CrypticSpinner
     AVAILABLE_CHARS = "0123456789abcdefABCDEF~!@#$%^&*()+=_".chars.freeze #: Array[String]
-    INITIAL_CHAR = ".".freeze #: String
+    INITIAL_CHAR = "." #: String
     ELLIPSIS_FRAMES = [".", "..", "...", ""].freeze #: Array[String]
 
     FPS = 20 #: Integer
@@ -89,7 +89,7 @@ module Bubbles
     attr_reader :id #: Integer
     attr_reader :size #: Integer
     attr_reader :rows #: Integer
-    attr_reader :label #: String
+    attr_accessor :label
     attr_reader :label_color #: String
     attr_reader :color_a #: String
     attr_reader :color_b #: String
@@ -129,7 +129,7 @@ module Bubbles
       @initialized = false
 
       @birth_offsets = Array.new(@rows) do |row|
-        Array.new(@size) { rand * MAX_BIRTH_OFFSET + (row * 0.1) }
+        Array.new(@size) { (rand * MAX_BIRTH_OFFSET) + (row * 0.1) }
       end
 
       @gradient = generate_gradient
@@ -173,11 +173,11 @@ module Bubbles
         line = String.new
 
         @size.times do |i|
-          if !@initialized && elapsed < @birth_offsets[row][i]
-            line << @initial_frames[@step][row][i]
-          else
-            line << @cycling_frames[@step][row][i]
-          end
+          line << if !@initialized && elapsed < @birth_offsets[row][i]
+                    @initial_frames[@step][row][i]
+                  else
+                    @cycling_frames[@step][row][i]
+                  end
         end
 
         if row == @rows - 1 && !@label.empty?
@@ -208,9 +208,7 @@ module Bubbles
     def width
       w = @size
 
-      unless @label.empty?
-        w += 1 + @label.length + (ELLIPSIS_FRAMES.max_by(&:length) || "").length
-      end
+      w += 1 + @label.length + (ELLIPSIS_FRAMES.max_by(&:length) || "").length unless @label.empty?
 
       w
     end
@@ -221,9 +219,6 @@ module Bubbles
     end
 
     #: (String) -> void
-    def set_label(new_label)
-      @label = new_label
-    end
 
     private
 
